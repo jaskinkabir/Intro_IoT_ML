@@ -1,0 +1,9 @@
+[submodule "hw2-jaskinkabir"]
+	path = hw2-jaskinkabir
+	url = https://github.com/holleman-courses/hw2-jaskinkabir.git
+[submodule "hw3-arduino-jaskinkabir"]
+	path = hw3-arduino-jaskinkabir
+	url = https://github.com/holleman-courses/hw3-arduino-jaskinkabir.git
+[submodule "proj1-awesome_team"]
+	path = proj1-awesome_team
+	url = https://github.com/holleman-courses/proj1-awesome_team.git
