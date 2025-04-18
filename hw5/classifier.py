@@ -31,10 +31,10 @@ class Classifier:
         if save_path is not None:
             checkpoint_callback = tf_keras.callbacks.ModelCheckpoint(
                 save_path,
-                save_best_only=True,
-                monitor='val_accuracy',
-                mode='max',
-                initial_value_threshold=best_accuracy
+                save_best_only=False,
+                # monitor='val_accuracy',
+                # mode='max',
+                # initial_value_threshold=best_accuracy
             )
         early_stop = tf_keras.callbacks.EarlyStopping(
             monitor='val_accuracy',
@@ -43,7 +43,7 @@ class Classifier:
         )
 
         
-        hist = self.model.fit(**fit_kwargs, callbacks=[checkpoint_callback, early_stop])
+        hist = self.model.fit(**fit_kwargs, callbacks=[early_stop])
         
         best_accuracy_new = max(hist.history['val_accuracy'])
         print(f"Best Validation Accuracy: {best_accuracy_new}")

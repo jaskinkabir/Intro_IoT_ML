@@ -7,7 +7,7 @@ from classifier import Classifier
 import numpy as np # Import numpy
 import json
 
-model_name = 'best_mini'
+model_name = 'initial_model'
 
 batch_size = 32
 AUTOTUNE = tf.data.AUTOTUNE
@@ -28,7 +28,7 @@ num_classes = len(label_list)
 
 train, val, test, loaded_spec_info = load_datasets(processed_dataset_path, batch_size)
 
-model = tf_keras.models.load_model('training/best_model.keras')
+model = tf_keras.models.load_model(f'training/{model_name}.keras')
 
 # Compile with only accuracy, as other metrics cause shape issues here
 model.compile(

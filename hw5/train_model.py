@@ -51,15 +51,17 @@ print(f"Input shape determined from dataset spec: {input_shape}")
 # Define the model
 _model = models.Sequential([
     layers.Input(shape=input_shape),
-    layers.Conv2D(32, 3, activation='relu'),
-    layers.MaxPooling2D(pool_size=(1,2)),
-    layers.BatchNormalization(),
+    layers.Conv2D(32, 5, activation='relu'),
+    layers.Conv2D(16, 3, activation='relu'),
+    #layers.Conv2D(64, 3, activation='relu'),
+    # layers.MaxPooling2D(pool_size=(1,2)),
+    # layers.BatchNormalization(),
     
-    layers.Conv2D(64, 3, activation='relu'),
-    layers.BatchNormalization(),
+    # layers.Conv2D(64, 3, activation='relu'),
+    # layers.BatchNormalization(),
     
-    layers.Conv2D(32, 3, activation='relu'),
-    layers.BatchNormalization(),
+    # layers.Conv2D(32, 3, activation='relu'),
+    # layers.BatchNormalization(),
 
     # layers.Conv2D(256, 3, activation='relu'),
     # layers.BatchNormalization(),
@@ -78,17 +80,20 @@ model = Classifier(
     metrics = ['accuracy'],
 )
 
-model.model.summary()
+#model.model.summary()
 train_hist = model.fit(
     reset_best_acc = True,
-    save_path = 'training/10d.keras',
+    save_path = 'training/initial_model.keras',
+    stop_patience = 50,
     fit_kwargs = {
         'x': train,
-        'validation_data': val,
-        'epochs': 10,
+        'validation_data': test,
+        'epochs': 30,
         'verbose': 1,
     },
 )
+
+#model.save('training/initial_model.keras')
 
 # plot loss and accuracy curves and save figure as png
 def plot_loss_accuracy(history, save_path):
@@ -115,5 +120,5 @@ def plot_loss_accuracy(history, save_path):
     plt.tight_layout()
     plt.savefig(save_path)
     plt.show()
-#plot_loss_accuracy(train_hist, 'training/loss_accuracy.png')
+plot_loss_accuracy(train_hist, 'training/loss_accuracy.png')
 
