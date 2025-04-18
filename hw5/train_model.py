@@ -4,6 +4,8 @@ from tf_keras import models, layers
 import os
 from gen_datasets_new import gen_datasets_and_save, load_datasets, DatasetType
 from classifier import Classifier
+import numpy as np
+import matplotlib.pyplot as plt
 
 batch_size = 32
 AUTOTUNE = tf.data.AUTOTUNE
@@ -14,6 +16,14 @@ processed_dataset_path = os.path.join(home_dir, "iot/datasets/processed_mini_spe
 
 # Rename 'spec' to 'loaded_spec_info' to clarify it's just informational now
 train, val, test, loaded_spec_info = load_datasets(processed_dataset_path, batch_size)
+
+num_classes = 4 # Number of classes in the dataset
+# Define the label list based on the dataset
+silence_str = "_silence"
+unknown_str = "_unknown"
+label_list = [silence_str, unknown_str] + ['stop', 'go'] # Should be ['_silence', '_unknown', 'stop', 'go']
+
+
 #train = None
 if train is None:
     print("No datasets found. Generating datasets...")
@@ -69,8 +79,9 @@ model = Classifier(
 )
 
 model.model.summary()
-model.fit(
-    save_path = 'training/best_model.h5',
+train_hist = model.fit(
+    reset_best_acc = True,
+    save_path = 'training/10d.keras',
     fit_kwargs = {
         'x': train,
         'validation_data': val,
@@ -79,4 +90,30 @@ model.fit(
     },
 )
 
-model.evaluate(test)
+# plot loss and accuracy curves and save figure as png
+def plot_loss_accuracy(history, save_path):
+    # Create a figure with two subplots
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 8))
+
+    # Plot training & validation accuracy values
+    ax1.plot(history.history['accuracy'], label='Train Accuracy')
+    ax1.plot(history.history['val_accuracy'], label='Validation Accuracy')
+    ax1.set_title('Model Accuracy')
+    ax1.set_ylabel('Accuracy')
+    ax1.set_xlabel('Epoch')
+    ax1.legend()
+
+    # Plot training & validation loss values
+    ax2.plot(history.history['loss'], label='Train Loss')
+    ax2.plot(history.history['val_loss'], label='Validation Loss')
+    ax2.set_title('Model Loss')
+    ax2.set_ylabel('Loss')
+    ax2.set_xlabel('Epoch')
+    ax2.legend()
+
+    # Save the figure
+    plt.tight_layout()
+    plt.savefig(save_path)
+    plt.show()
+#plot_loss_accuracy(train_hist, 'training/loss_accuracy.png')
+
