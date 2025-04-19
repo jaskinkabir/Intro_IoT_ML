@@ -1,6 +1,6 @@
 import tf_keras
 import tensorflow as tf
-from tf_keras import models, layers
+from tf_keras import models, layers, regularizers
 import os
 from gen_datasets_new import gen_datasets_and_save, load_datasets, DatasetType
 from classifier import Classifier
@@ -49,25 +49,26 @@ input_shape = train.element_spec[0].shape[1:]
 print(f"Input shape determined from dataset spec: {input_shape}")
 
 # Define the model
+
+l1 = 0#.01
+l2 = 0#.01
+
+model_name = '10d'
+
 _model = models.Sequential([
     layers.Input(shape=input_shape),
-    layers.Conv2D(32, 5, activation='relu'),
-    layers.Conv2D(64, 5, activation='relu'),
-    #layers.Conv2D(64, 3, activation='relu'),
-    # layers.MaxPooling2D(pool_size=(1,2)),
-    # layers.BatchNormalization(),
-    
-    # layers.Conv2D(64, 3, activation='relu'),
-    # layers.BatchNormalization(),
-    
-    # layers.Conv2D(32, 3, activation='relu'),
-    # layers.BatchNormalization(),
-
-    # layers.Conv2D(256, 3, activation='relu'),
-    # layers.BatchNormalization(),
-    
-    # layers.Conv2D(256, 3, activation='relu'),
-    # layers.BatchNormalization(),
+    layers.Conv2D(
+        32,
+        5,
+        activation='relu',
+        kernel_regularizer=regularizers.l1_l2(l1=l1, l2=l2),
+    ),
+    layers.Conv2D(
+        64,
+        3,
+        activation='relu',
+        kernel_regularizer=regularizers.l1_l2(l1=l1, l2=l2),
+    ),
     
     layers.GlobalMaxPooling2D(),
     layers.Dense(4),
@@ -83,7 +84,7 @@ model = Classifier(
 #model.model.summary()
 train_hist = model.fit(
     reset_best_acc = True,
-    save_path = 'training/initial_model.keras',
+    save_path = f'training/{model_name}.keras',
     stop_patience = 50,
     fit_kwargs = {
         'x': train,
@@ -120,5 +121,5 @@ def plot_loss_accuracy(history, save_path):
     plt.tight_layout()
     plt.savefig(save_path)
     plt.show()
-plot_loss_accuracy(train_hist, 'training/loss_accuracy.png')
+#plot_loss_accuracy(train_hist, 'training/loss_accuracy.png')
 
