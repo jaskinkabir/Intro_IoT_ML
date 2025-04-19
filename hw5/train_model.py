@@ -51,9 +51,9 @@ print(f"Input shape determined from dataset spec: {input_shape}")
 # Define the model
 
 l1 = 0#.01
-l2 = 0#.01
+l2 = 0.01
 
-model_name = '10d'
+model_name = 'l2'
 
 _model = models.Sequential([
     layers.Input(shape=input_shape),
@@ -65,7 +65,7 @@ _model = models.Sequential([
     ),
     layers.Conv2D(
         64,
-        3,
+        5,
         activation='relu',
         kernel_regularizer=regularizers.l1_l2(l1=l1, l2=l2),
     ),

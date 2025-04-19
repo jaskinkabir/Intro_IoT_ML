@@ -7,7 +7,7 @@ from classifier import Classifier
 import numpy as np # Import numpy
 import json
 
-model_name = 'initial_model'
+model_name = '10d'
 
 batch_size = 32
 AUTOTUNE = tf.data.AUTOTUNE
