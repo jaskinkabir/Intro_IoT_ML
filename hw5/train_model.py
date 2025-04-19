@@ -52,7 +52,7 @@ print(f"Input shape determined from dataset spec: {input_shape}")
 _model = models.Sequential([
     layers.Input(shape=input_shape),
     layers.Conv2D(32, 5, activation='relu'),
-    layers.Conv2D(16, 3, activation='relu'),
+    layers.Conv2D(64, 5, activation='relu'),
     #layers.Conv2D(64, 3, activation='relu'),
     # layers.MaxPooling2D(pool_size=(1,2)),
     # layers.BatchNormalization(),

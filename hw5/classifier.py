@@ -43,7 +43,7 @@ class Classifier:
         )
 
         
-        hist = self.model.fit(**fit_kwargs, callbacks=[early_stop])
+        hist = self.model.fit(**fit_kwargs, callbacks=[checkpoint_callback, early_stop])
         
         best_accuracy_new = max(hist.history['val_accuracy'])
         print(f"Best Validation Accuracy: {best_accuracy_new}")

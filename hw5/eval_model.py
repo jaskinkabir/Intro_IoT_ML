@@ -39,6 +39,8 @@ model.compile(
     ]
 )
 
+model.summary()
+
 # Evaluate basic loss and accuracy
 print("Evaluating model loss and accuracy...")
 train_hist = model.evaluate(
